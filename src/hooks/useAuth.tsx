@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api, { setAccessToken as setApiAccessToken } from '../lib/api';
+import { setAccessToken as setApiAccessToken } from '../lib/api';
 import { useRouter } from 'next/router';
 
 interface AuthContextType {
