@@ -1,16 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
 :root {
-  /* Vellum & Ink Aesthetic Tokens */
-  --ink: #1c1917; /* Very dark charcoal */
-  --vellum: #fdfaf6; /* Warm off-white */
+  /* Enhanced Vellum & Ink Aesthetic Tokens */
+  --ink: #181614; /* Deepest charcoal */
+  --ink-light: #2c2825;
+  --vellum: #fdfaf6; /* Base warm off-white */
+  --vellum-dark: #f5f0e6;
   --gilt: #d4af37; /* Gold/bronze accent */
-  --crimson: #9e1b1b; /* Deep red */
-  --slate: #64748b; /* Muted gray */
-  --mist: #e2e8f0; /* Light gray */
-
+  --gilt-light: #e8c766;
+  --crimson: #9e1b1b;
+  --slate: #71706e;
+  --mist: #e6e2d8;
+  
   --font-display: 'Cormorant Garamond', serif;
   --font-body: 'Inter', sans-serif;
+
+  /* Glassmorphism / Shadow Tokens */
+  --shadow-sm: 0 2px 8px rgba(24, 22, 20, 0.04);
+  --shadow-md: 0 8px 24px rgba(24, 22, 20, 0.08);
+  --shadow-hover: 0 12px 32px rgba(24, 22, 20, 0.12);
+  --glass-bg: rgba(253, 250, 246, 0.7);
+  --glass-border: rgba(230, 226, 216, 0.5);
 }
 
 * {
@@ -20,12 +30,25 @@
 }
 
 body {
-  background-color: var(--vellum);
+  /* Subtle gradient background for depth */
+  background: radial-gradient(circle at top center, var(--vellum) 0%, var(--vellum-dark) 100%);
+  background-attachment: fixed;
   color: var(--ink);
   font-family: var(--font-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Subtle texture overlay for a "paper" feel */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -39,11 +62,31 @@ h1, h2, h3, h4, h5, h6 {
 a {
   color: var(--ink);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Elegant underline effect for links */
+a:not(.btn):not(.app-nav-item):not(.card)::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--gilt);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+a:not(.btn):not(.app-nav-item):not(.card):hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 a:hover {
-  color: var(--gilt);
+  color: var(--ink-light);
 }
 
 button {
@@ -63,7 +106,7 @@ input, textarea {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--vellum);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: var(--mist);
@@ -71,4 +114,30 @@ input, textarea {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--slate);
+}
+
+/* Global Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Apply animation classes to main elements */
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: fadeInUp 0.6s ease-out forwards;
 }
