@@ -19,8 +19,8 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await api.post('/auth/register', { email, password, name });
-      router.push('/login');
+      await api.post('/auth/register', { email, password, fullName: name });
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Failed to register. Please try again.');
