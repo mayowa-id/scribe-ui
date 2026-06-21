@@ -19,7 +19,9 @@ export default function Login() {
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      login(response.data.accessToken);
+      const { accessToken, refreshToken, user } = response.data.data;
+      if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+      login(accessToken, user);
       if (typeof window !== 'undefined') {
         window.location.href = '/'; // Hard redirect to ensure state refresh if needed
       }

@@ -28,6 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     setApiAccessToken(null);
     setUser(null);
+    localStorage.removeItem('refreshToken');
     router.push('/login');
   };
 
@@ -37,9 +38,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const axiosModule = await import('axios');
         const axios = axiosModule.default;
-        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/refresh`, {}, { withCredentials: true });
-        if (res.data.accessToken) {
-          login(res.data.accessToken);
+        const rt = localStorage.getItem('refreshToken');
+        if (!rt) throw new Error('No refresh token');
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/refresh`, { refreshToken: rt });
+        if (res.data.data?.accessToken) {
+          if (res.data.data.refreshToken) localStorage.setItem('refreshToken', res.data.data.refreshToken);
+          login(res.data.data.accessToken, res.data.data.user);
         }
       } catch (err: unknown) {
         // Not logged in

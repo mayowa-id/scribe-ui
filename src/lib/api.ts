@@ -29,13 +29,14 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         // Attempt to refresh the token
+        const rt = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
         const refreshResponse = await axios.post(
           `${api.defaults.baseURL}/auth/refresh`,
-          {},
-          { withCredentials: true }
+          { refreshToken: rt }
         );
-        const { accessToken: newToken } = refreshResponse.data;
+        const { accessToken: newToken, refreshToken: newRt } = refreshResponse.data.data;
         setAccessToken(newToken);
+        if (typeof window !== 'undefined' && newRt) localStorage.setItem('refreshToken', newRt);
         // Dispatch an event so useAuth can update its state if needed
         if (typeof window !== 'undefined') {
            window.dispatchEvent(new CustomEvent('tokenRefreshed', { detail: newToken }));
