@@ -59,7 +59,7 @@ export default function VerifyEmail() {
     try {
       await api.post('/auth/verify-email', { email, code });
       setSuccess('Email verified! Redirecting to login…');
-      setTimeout(() => router.push('/login'), 1800);
+      setTimeout(() => router.push('/login?verified=true'), 1800);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || 'Invalid verification code. Please try again.');
