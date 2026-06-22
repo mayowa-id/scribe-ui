@@ -34,7 +34,7 @@ api.interceptors.response.use(
       try {
         // Attempt to refresh the token
         const rt = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
-        if (!rt) {
+        if (!rt || rt === 'null' || rt === 'undefined') {
           throw new Error('No refresh token available');
         }
         const refreshResponse = await axios.post(

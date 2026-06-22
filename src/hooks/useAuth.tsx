@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const axiosModule = await import('axios');
         const axios = axiosModule.default;
         const rt = localStorage.getItem('refreshToken');
-        if (!rt) throw new Error('No refresh token');
+        if (!rt || rt === 'null' || rt === 'undefined') throw new Error('No refresh token');
         const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/auth/refresh`, { refreshToken: rt });
         if (res.data.data?.accessToken) {
           if (res.data.data.refreshToken) localStorage.setItem('refreshToken', res.data.data.refreshToken);
