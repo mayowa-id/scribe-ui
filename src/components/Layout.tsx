@@ -11,13 +11,15 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const { logout, isLoading, token } = useAuth();
 
-  // Simple auth guard
-  if (!isLoading && !token && router.pathname !== '/login' && router.pathname !== '/register') {
+  // Simple auth guard (Temporarily Disabled)
+  /*
+  if (!isLoading && !token && router.pathname !== '/login' && router.pathname !== '/register' && router.pathname !== '/verify-email') {
     if (typeof window !== 'undefined') {
       router.push('/login');
     }
     return null;
   }
+  */
 
   // Don't wrap auth pages or interview page in the standard sidebar layout
   if (router.pathname === '/login' || router.pathname === '/register' || router.pathname === '/interview') {

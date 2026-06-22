@@ -54,7 +54,8 @@ api.interceptors.response.use(
         // Refresh failed, user needs to login again
         setAccessToken(null);
         if (typeof window !== 'undefined') {
-          window.location.href = '/login';
+          // Temporarily disabled so user barrier is fully removed
+          // window.location.href = '/login';
         }
         return Promise.reject(refreshError);
       }
