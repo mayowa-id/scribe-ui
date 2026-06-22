@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useAuth } from '../hooks/useAuth';
 import api from '../lib/api';
 import axios from 'axios';
@@ -11,6 +12,8 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const router = useRouter();
+  const verified = router.query.verified === 'true';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,6 +46,21 @@ export default function Login() {
       </Head>
       <div className="auth-card card">
         <h1 className="auth-title">Welcome Back</h1>
+        {verified && (
+          <div style={{
+            background: 'rgba(34, 197, 94, 0.08)',
+            border: '1px solid rgba(34, 197, 94, 0.25)',
+            borderRadius: '8px',
+            padding: '0.875rem 1.25rem',
+            marginBottom: '1.75rem',
+            textAlign: 'center',
+            fontSize: '0.875rem',
+            color: '#166534',
+            fontWeight: 500,
+          }}>
+            ✓ Email verified successfully — you can now log in.
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label" htmlFor="email">Email</label>
