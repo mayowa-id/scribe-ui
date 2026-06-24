@@ -114,42 +114,51 @@ export default function Interview() {
   };
 
   return (
-    <div className="stepper-wrapper">
+    <div className="animate-fade-in" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <Head>
         <title>Voice Profile Interview - Scribe</title>
       </Head>
-      <div className="stepper-card card">
-        <h1 className="auth-title" style={{ fontSize: '1.5rem', marginBottom: '2rem' }}>Voice Profiling</h1>
+      <div className="card" style={{ maxWidth: '700px', width: '100%', padding: '4rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <h1 style={{ fontSize: '2.5rem', color: 'var(--ink)' }}>Voice Profiling</h1>
+          <p style={{ color: 'var(--slate)' }}>Capturing your unique theological signature.</p>
+        </div>
         
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '2rem' }}>Loading interview...</div>
+          <div className="animate-fade-in" style={{ textAlign: 'center', padding: '2rem', color: 'var(--slate)' }}>
+            Establishing connection to Scribe...
+          </div>
         ) : error ? (
-          <div className="form-error" style={{ textAlign: 'center' }}>{error}</div>
+          <div className="form-error animate-fade-in" style={{ textAlign: 'center', color: 'var(--crimson)' }}>{error}</div>
         ) : currentQuestion?.complete ? (
-          <div style={{ textAlign: 'center', padding: '2rem' }}>
-            <h2 style={{ marginBottom: '1rem' }}>Interview Complete</h2>
-            <p style={{ color: 'var(--slate)' }}>We are analyzing your voice profile...</p>
+          <div className="animate-slide-up" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
+            <h2 style={{ marginBottom: '1.5rem', color: 'var(--gilt)' }}>Profile Complete</h2>
+            <p style={{ color: 'var(--ink)', fontSize: '1.1rem', marginBottom: '2rem' }}>
+              We have successfully extracted your theological voice, rhetorical patterns, and unique writing style.
+            </p>
+            <div className="generating-glow" style={{ width: '60px', height: '60px', borderRadius: '50%', border: '2px solid var(--mist)', margin: '0 auto' }}></div>
+            <p style={{ marginTop: '1.5rem', color: 'var(--slate)', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Synthesizing...</p>
           </div>
         ) : (
-          <form onSubmit={handleSubmitAnswer}>
-            <div className="stepper-question">
-              {currentQuestion?.questionText}
+          <form onSubmit={handleSubmitAnswer} className="animate-slide-up">
+            <div style={{ fontSize: '1.5rem', fontFamily: 'var(--font-display)', color: 'var(--ink)', lineHeight: '1.4', marginBottom: '2.5rem', textAlign: 'center' }}>
+              "{currentQuestion?.questionText}"
             </div>
-            <div className="form-group">
+            <div className="form-group" style={{ marginBottom: '2rem' }}>
               <textarea
                 className="form-input"
-                rows={5}
+                rows={6}
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Type your answer here..."
+                placeholder="Speak from the heart..."
                 required
                 disabled={submitting}
-                style={{ resize: 'vertical' }}
+                style={{ resize: 'vertical', fontSize: '1.1rem', padding: '1.5rem', backgroundColor: 'rgba(255, 255, 255, 0.7)' }}
               />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button type="submit" className="btn btn-primary" disabled={submitting || !answer.trim()}>
-                {submitting ? 'Submitting...' : 'Next'}
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <button type="submit" className="btn btn-primary" style={{ padding: '1rem 3rem', fontSize: '1rem' }} disabled={submitting || !answer.trim()}>
+                {submitting ? 'Recording...' : 'Continue'}
               </button>
             </div>
           </form>

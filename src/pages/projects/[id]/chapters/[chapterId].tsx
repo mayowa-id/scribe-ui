@@ -83,20 +83,26 @@ export default function ChapterEditor() {
   if (error || !chapter) return <div className="form-error">{error || 'Chapter not found'}</div>;
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div className="animate-fade-in" style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--vellum-dark)' }}>
       <Head>
         <title>{chapter.title} - Scribe</title>
       </Head>
 
-      <div className="page-header" style={{ marginBottom: '1.5rem', paddingBottom: '0.5rem' }}>
-        <Link href={`/projects/${id}`} style={{ fontSize: '0.875rem', color: 'var(--slate)', textDecoration: 'underline', marginBottom: '0.5rem', display: 'inline-block' }}>
-          &larr; Back to Project
-        </Link>
-        <h1 className="page-title" style={{ fontSize: '2rem' }}>{chapter.title}</h1>
+      <div style={{ padding: '1rem 2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid var(--mist)', backgroundColor: 'var(--glass-bg)', backdropFilter: 'var(--glass-blur)' }}>
+        <div>
+          <Link href={`/projects/${id}`} style={{ fontSize: '0.875rem', color: 'var(--slate)', textTransform: 'uppercase', letterSpacing: '0.05em', textDecoration: 'none' }}>
+            &larr; Return to Manuscript
+          </Link>
+          <h1 style={{ fontSize: '1.5rem', color: 'var(--ink)', margin: '0.25rem 0 0 0' }}>{chapter.title}</h1>
+        </div>
+        <div style={{ color: 'var(--slate)', fontSize: '0.875rem' }}>
+          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--gilt)', marginRight: '0.5rem' }}></span>
+          Auto-saving
+        </div>
       </div>
 
-      <div className="editor-layout">
-        <div className="editor-pane">
+      <div className="editor-layout" style={{ margin: '0', padding: '2rem', height: 'calc(100vh - 80px)' }}>
+        <div className="editor-pane" style={{ position: 'relative' }}>
           <TiptapEditor
             content={chapter.content || ''}
             onChange={handleContentChange}
@@ -107,14 +113,14 @@ export default function ChapterEditor() {
         </div>
 
         <div className="generation-pane">
-          <div style={{ flex: 1, minHeight: 0 }}>
+          <div style={{ flex: '0 0 auto' }}>
             <GenerationPanel
               chapterId={chapterId as string}
               onStreamContent={handleStreamContent}
               onStreamComplete={handleStreamComplete}
             />
           </div>
-          <div style={{ flex: 1, minHeight: 0 }}>
+          <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
             <AssistantChat chapterId={chapterId as string} />
           </div>
         </div>

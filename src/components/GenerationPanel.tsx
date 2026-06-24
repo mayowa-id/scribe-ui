@@ -71,32 +71,37 @@ export const GenerationPanel: React.FC<GenerationPanelProps> = ({
   };
 
   return (
-    <div className="card" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <h3 style={{ marginBottom: '1rem' }}>Scribe Generator</h3>
-      <p style={{ fontSize: '0.875rem', color: 'var(--slate)', marginBottom: '1rem' }}>
-        Provide instructions for the next section. Scribe will write using your voice profile.
+    <div className={`card ${isGenerating ? 'generating-glow' : ''}`} style={{ height: '100%', display: 'flex', flexDirection: 'column', transition: 'box-shadow 0.5s ease' }}>
+      <h3 style={{ marginBottom: '0.5rem', color: 'var(--ink)' }}>Scribe Generator</h3>
+      <p style={{ fontSize: '0.875rem', color: 'var(--slate)', marginBottom: '1.5rem', lineHeight: '1.4' }}>
+        Provide instructions for the next section. Scribe will write using your synthesized voice profile.
       </p>
       
-      <div className="form-group" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="form-group" style={{ flex: 1, display: 'flex', flexDirection: 'column', marginBottom: '1.5rem' }}>
         <textarea
           className="form-input"
-          style={{ flex: 1, resize: 'none' }}
-          placeholder="e.g. Describe the bustling market in the morning light..."
+          style={{ flex: 1, resize: 'none', minHeight: '120px', backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
+          placeholder="e.g. Describe the bustling market in the morning light, focusing on sensory details..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           disabled={isGenerating}
         />
       </div>
 
-      {error && <span className="form-error" style={{ marginBottom: '1rem' }}>{error}</span>}
+      {error && <span className="form-error" style={{ marginBottom: '1rem', color: 'var(--crimson)', fontSize: '0.875rem' }}>{error}</span>}
 
       <button
         className="btn btn-primary"
-        style={{ width: '100%' }}
+        style={{ width: '100%', padding: '1rem' }}
         onClick={handleGenerate}
         disabled={isGenerating || !prompt.trim()}
       >
-        {isGenerating ? 'Generating...' : 'Generate Text'}
+        {isGenerating ? (
+          <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span className="generating-glow" style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--vellum)', display: 'inline-block' }}></span>
+            Inscribing...
+          </span>
+        ) : 'Generate Text'}
       </button>
     </div>
   );

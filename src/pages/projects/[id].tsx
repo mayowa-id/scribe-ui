@@ -73,44 +73,46 @@ export default function ProjectDetails() {
   }
 
   return (
-    <div>
+    <div className="animate-fade-in" style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 2rem' }}>
       <Head>
         <title>{project.title} - Scribe</title>
       </Head>
 
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div>
-          <Link href="/" style={{ fontSize: '0.875rem', color: 'var(--slate)', textDecoration: 'underline', marginBottom: '1rem', display: 'inline-block' }}>
-            &larr; Back to Library
-          </Link>
-          <h1 className="page-title">{project.title}</h1>
-          {project.description && <p className="page-subtitle">{project.description}</p>}
-        </div>
+      <div style={{ marginBottom: '3rem' }}>
+        <Link href="/" style={{ fontSize: '0.875rem', color: 'var(--slate)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1.5rem', display: 'inline-block' }}>
+          &larr; Return to Library
+        </Link>
+        <h1 style={{ fontSize: '3.5rem', color: 'var(--ink)' }}>{project.title}</h1>
+        {project.description && <p style={{ fontSize: '1.25rem', color: 'var(--slate)', maxWidth: '800px', marginTop: '1rem' }}>{project.description}</p>}
       </div>
 
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-        <div style={{ flex: 2, minWidth: '300px' }}>
-          <h2 style={{ marginBottom: '1.5rem' }}>Chapters</h2>
+      <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+        <div style={{ flex: '1 1 600px' }}>
+          <h2 style={{ marginBottom: '2rem', fontSize: '1.75rem', borderBottom: '1px solid var(--mist)', paddingBottom: '1rem' }}>Chapters</h2>
           {project.chapters && project.chapters.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {project.chapters.map((chapter) => (
-                <Link key={chapter.id} href={`/projects/${id}/chapters/${chapter.id}`} className="card card-hover" style={{ padding: '1.5rem', textDecoration: 'none' }}>
-                  <h3 style={{ margin: 0, fontSize: '1.25rem' }}>Chapter {chapter.order}: {chapter.title}</h3>
+                <Link key={chapter.id} href={`/projects/${id}/chapters/${chapter.id}`} className="card card-hover" style={{ padding: '2rem', textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+                  <div style={{ width: '3rem', height: '3rem', borderRadius: '50%', background: 'var(--ink)', color: 'var(--vellum)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.25rem', fontFamily: 'var(--font-display)', marginRight: '1.5rem' }}>
+                    {chapter.order}
+                  </div>
+                  <h3 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--ink)' }}>{chapter.title}</h3>
+                  <div style={{ marginLeft: 'auto', color: 'var(--gilt)' }}>&rarr;</div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div style={{ padding: '3rem', border: '1px dashed var(--mist)', borderRadius: '8px', textAlign: 'center' }}>
-              <p style={{ color: 'var(--slate)' }}>No chapters yet. Start writing!</p>
+            <div style={{ padding: '4rem', border: '1px dashed var(--gilt-light)', borderRadius: '16px', background: 'rgba(252, 249, 242, 0.5)', textAlign: 'center' }}>
+              <p style={{ color: 'var(--slate)', fontSize: '1.1rem' }}>The manuscript awaits its first chapter.</p>
             </div>
           )}
         </div>
 
-        <div style={{ flex: 1, minWidth: '250px' }}>
+        <div style={{ flex: '0 1 350px', position: 'sticky', top: '2rem' }}>
           <div className="card">
-            <h3 style={{ marginBottom: '1rem' }}>Add Chapter</h3>
+            <h3 style={{ marginBottom: '1.5rem', color: 'var(--ink)' }}>Scribe a New Chapter</h3>
             <form onSubmit={handleCreateChapter}>
-              <div className="form-group">
+              <div className="form-group" style={{ marginBottom: '1.5rem' }}>
                 <label className="form-label" htmlFor="chapterTitle">Chapter Title</label>
                 <input
                   id="chapterTitle"
@@ -118,11 +120,11 @@ export default function ProjectDetails() {
                   className="form-input"
                   value={newChapterTitle}
                   onChange={(e) => setNewChapterTitle(e.target.value)}
-                  placeholder="e.g. A New Beginning"
+                  placeholder="e.g. Genesis of the Vision"
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={isCreatingChapter}>
+              <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '0.875rem' }} disabled={isCreatingChapter || !newChapterTitle.trim()}>
                 {isCreatingChapter ? 'Adding...' : 'Add Chapter'}
               </button>
             </form>
