@@ -14,7 +14,7 @@ export default function Dashboard() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   const [isCreating, setIsCreating] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
@@ -62,9 +62,9 @@ export default function Dashboard() {
       </Head>
 
       <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-        <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem', color: 'var(--ink)' }}>The Scribe</h1>
+        <h1 style={{ fontSize: '3.5rem', marginBottom: '1rem', color: 'var(--ink)' }}>Scribe</h1>
         <p style={{ fontSize: '1.25rem', color: 'var(--slate)', maxWidth: '600px', margin: '0 auto' }}>
-          Your prophetic voice, amplified. Manage your manuscripts and let the Scribe assistant help you shape the culture.
+          Your prophetic voice, amplified. Manage your manuscripts and let Scribe assistant help you shape the culture.
         </p>
       </div>
 
