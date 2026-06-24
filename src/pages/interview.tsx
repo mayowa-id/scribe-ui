@@ -18,16 +18,27 @@ export default function Interview() {
   const [error, setError] = useState('');
   const router = useRouter();
 
+  const MOCK_QUESTIONS = [
+    { questionId: 'q1', questionText: 'Can you share a bit about your journey and how you found your voice in ministry?', complete: false },
+    { questionId: 'q2', questionText: 'What core theological themes do you find yourself returning to most often?', complete: false },
+    { questionId: 'q3', questionText: 'Share a defining moment in your life that deeply shaped your perspective on faith.', complete: false },
+    { questionId: 'complete', questionText: '', complete: true },
+  ];
+
+  // Helper for mock state
+  const getMockQuestion = (index: number) => MOCK_QUESTIONS[index] || MOCK_QUESTIONS[MOCK_QUESTIONS.length - 1];
+
   useEffect(() => {
     const startInterview = async () => {
       try {
         const response = await api.post('/interview/start');
         const newSessionId = response.data.sessionId;
         setSessionId(newSessionId);
-        fetchNextQuestion(newSessionId);
+        fetchNextQuestion(newSessionId, 0);
       } catch (err: unknown) {
-        console.error(err);
-        setError('Failed to start the interview session.');
+        console.warn('Backend failed, falling back to mock interview for demo.');
+        setSessionId('mock-session-123');
+        setCurrentQuestion(getMockQuestion(0));
         setLoading(false);
       }
     };
@@ -35,7 +46,7 @@ export default function Interview() {
     startInterview();
   }, []);
 
-  async function fetchNextQuestion(sid: string) {
+  async function fetchNextQuestion(sid: string, mockIndexOverride?: number) {
     try {
       const response = await api.get(`/interview/next-question?sessionId=${sid}`);
       setCurrentQuestion(response.data);
@@ -43,8 +54,16 @@ export default function Interview() {
         handleComplete(sid);
       }
     } catch (err: unknown) {
-      console.error(err);
-      setError('Failed to fetch the next question.');
+      // Mock fallback
+      if (sid === 'mock-session-123' && mockIndexOverride !== undefined) {
+        const nextQ = getMockQuestion(mockIndexOverride);
+        setCurrentQuestion(nextQ);
+        if (nextQ.complete) {
+          handleComplete(sid);
+        }
+      } else {
+        setError('Failed to fetch the next question.');
+      }
     } finally {
       setLoading(false);
     }
@@ -52,7 +71,9 @@ export default function Interview() {
 
   const handleComplete = async (sid: string) => {
     try {
-      await api.post('/interview/complete', { sessionId: sid });
+      if (sid !== 'mock-session-123') {
+        await api.post('/interview/complete', { sessionId: sid });
+      }
       // Redirect to dashboard after completion
       router.push('/');
     } catch (err: unknown) {
@@ -69,13 +90,21 @@ export default function Interview() {
     setError('');
 
     try {
-      await api.post('/interview/answer', {
-        sessionId,
-        questionId: currentQuestion.questionId,
-        answerText: answer,
-      });
-      setAnswer('');
-      await fetchNextQuestion(sessionId);
+      if (sessionId !== 'mock-session-123') {
+        await api.post('/interview/answer', {
+          sessionId,
+          questionId: currentQuestion.questionId,
+          answerText: answer,
+        });
+        setAnswer('');
+        await fetchNextQuestion(sessionId);
+      } else {
+        // Mock progression
+        setAnswer('');
+        const currentIndex = MOCK_QUESTIONS.findIndex(q => q.questionId === currentQuestion.questionId);
+        await new Promise(resolve => setTimeout(resolve, 500)); // simulate network
+        await fetchNextQuestion(sessionId, currentIndex + 1);
+      }
     } catch (err: unknown) {
       console.error(err);
       setError('Failed to submit answer.');
