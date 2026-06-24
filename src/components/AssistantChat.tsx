@@ -112,26 +112,31 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({ chapterId }) => {
   };
 
   return (
-    <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '400px', padding: '1rem' }}>
-      <h3 style={{ marginBottom: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--mist)' }}>
+    <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', backgroundColor: 'rgba(252, 249, 242, 0.95)' }}>
+      <h3 style={{ marginBottom: '1rem', paddingBottom: '0.75rem', borderBottom: '1px solid var(--mist)', color: 'var(--ink)' }}>
         Scribe Assistant
       </h3>
       
-      <div style={{ flex: 1, overflowY: 'auto', marginBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ flex: 1, overflowY: 'auto', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', paddingRight: '0.5rem' }}>
         {messages.length === 0 ? (
-          <p style={{ color: 'var(--slate)', fontSize: '0.875rem', textAlign: 'center', marginTop: 'auto', marginBottom: 'auto' }}>
-            How can I help you write today?
+          <p style={{ color: 'var(--slate)', fontSize: '0.9rem', textAlign: 'center', marginTop: 'auto', marginBottom: 'auto', fontStyle: 'italic' }}>
+            How can I refine your manuscript today?
           </p>
         ) : (
           messages.map((msg, i) => (
             <div key={i} style={{ 
               alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-              backgroundColor: msg.role === 'user' ? 'var(--ink)' : 'var(--mist)',
+              backgroundColor: msg.role === 'user' ? 'var(--ink)' : 'var(--vellum)',
               color: msg.role === 'user' ? 'var(--vellum)' : 'var(--ink)',
-              padding: '0.5rem 1rem',
-              borderRadius: '8px',
-              maxWidth: '80%',
-              fontSize: '0.875rem'
+              border: msg.role === 'user' ? 'none' : '1px solid var(--mist)',
+              padding: '0.75rem 1rem',
+              borderRadius: '12px',
+              borderBottomRightRadius: msg.role === 'user' ? '2px' : '12px',
+              borderBottomLeftRadius: msg.role === 'assistant' ? '2px' : '12px',
+              maxWidth: '85%',
+              fontSize: '0.95rem',
+              boxShadow: msg.role === 'user' ? 'var(--shadow-sm)' : 'none',
+              lineHeight: '1.5'
             }}>
               {msg.content}
             </div>
@@ -140,18 +145,18 @@ export const AssistantChat: React.FC<AssistantChatProps> = ({ chapterId }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSend} style={{ display: 'flex', gap: '0.5rem' }}>
+      <form onSubmit={handleSend} style={{ display: 'flex', gap: '0.75rem' }}>
         <input
           type="text"
           className="form-input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask Scribe..."
+          placeholder="Ask Scribe for guidance..."
           disabled={isStreaming}
-          style={{ flex: 1 }}
+          style={{ flex: 1, borderRadius: '24px', paddingLeft: '1.25rem' }}
         />
-        <button type="submit" className="btn btn-primary" disabled={isStreaming || !input.trim()}>
-          Send
+        <button type="submit" className="btn btn-primary" disabled={isStreaming || !input.trim()} style={{ borderRadius: '24px', padding: '0.75rem 1.5rem' }}>
+          Ask
         </button>
       </form>
     </div>
